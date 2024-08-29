@@ -1,0 +1,100 @@
+<odoo>
+    <record id="view_helpdesk_ticket_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <form string="Helpdesk Ticket">
+                <header>
+                    <button name="action_send" type="object" string="Илгээх"
+                        attrs="{'invisible': [('state', '!=', 'draft')]}"
+                        class="oe_highlight" />
+                    <button name="action_start" type="object" string="Гүйцэтгэх"
+                        attrs="{'invisible': [('state', '!=', 'sent')]}"
+                        class="oe_highlight"
+                        groups='ttt_helpdesk.group_staff,ttt_helpdesk.group_manager,base.group_system' />
+                    <button name="action_done" type="object" string="Хаах"
+                        attrs="{'invisible': [('state', '!=', 'in_progress')]}"
+                        class="oe_highlight"
+                        groups='ttt_helpdesk.group_staff,ttt_helpdesk.group_manager,base.group_system' />
+                    <button name="action_cancel" type="object" string="Цуцлах"
+                        attrs="{'invisible': [('state', 'not in', ['sent', 'in_progress'])]}"
+                        class="oe_highlight"
+                        groups='ttt_helpdesk.group_staff,ttt_helpdesk.group_manager,base.group_system' />
+                    <field name="state" widget="statusbar" statusbar_visible="sent,in_progress,done" />
+                </header>
+                <sheet>
+                    <field name="employee_id" invisible="1" />
+                    <div class="oe_title" style="max-width: none !important">
+                        <label for="name" />
+                        <h1>
+                            <field name="name" placeholder="Дуудлага"
+                                attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                        </h1>
+                    </div>
+                    <div class="oe_description">
+                        <label for="desc" />
+                        <field name="desc" placeholder="Дэлгэрэнгүй мэдээлэл"
+                            attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                    </div>
+                    <group string="Тохиргоо" col="3">
+                        <group>
+                            <field name="location_id"
+                                attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                        </group>
+                        <group>
+                            <field name="type_id"
+                                attrs="{'readonly': [('state', 'in', ['done', 'cancelled'])]}" />
+                        </group>
+                        <group attrs="{'invisible': [('state', 'in', ['draft', 'sent'])]}">
+                            <field name='editable' invisible='1' />
+                            <field name="staff_id" widget="many2one_avatar_user"
+                                attrs="{'readonly': [('editable', '=', False)]}" />
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_ids" widget="mail_thread" />
+                    <field name="activity_ids" widget="mail_activity" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_helpdesk_ticket_tree" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.tree</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <tree string="Helpdesk Tickets" default_order="create_date desc">
+                <field name='sent_date' />
+                <field name='location_id' />
+                <field name="type_id" />
+                <field name="name" />
+                <field name="state" widget="badge" decoration-success="state=='done'"
+                    decoration-warning="state=='draft'" decoration-danger="state=='cancelled'"
+                    decoration-info="state=='sent'" class='o_badge_secondary' />
+                <field name='employee_id' widget="many2one_avatar_user" />
+                <field name="staff_id" widget="many2one_avatar_user" />
+                <field name='done_date' />
+            </tree>
+        </field>
+    </record>
+
+    <record id='view_helpdesk_ticket_graph' model='ir.ui.view'>
+        <field name='name'>helpdesk.ticket.graph</field>
+        <field name='model'>helpdesk.ticket</field>
+        <field name='arch' type='xml'>
+            <graph string="Helpdesk Ticket" type="bar">
+                <field name="state" type="row" />
+                <field name="type_id" type="col" />
+                <field name="id" type="measure" string="Number of Tickets" widget="bar" />
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_helpdesk_ticket" model="ir.actions.act_window">
+        <field name="name">Tickets</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

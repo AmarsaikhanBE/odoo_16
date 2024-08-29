@@ -1,0 +1,16 @@
+<odoo>
+    <record id="module_category_helpdesk" model="ir.module.category">
+        <field name="name">Helpdesk</field>
+        <field name="description">Helpdesk Module</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="group_staff" model="res.groups">
+        <field name="name">Staff</field>
+        <field name="category_id" ref="module_category_helpdesk" />
+    </record>
+    <record id="group_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_category_helpdesk" />
+    </record>
+</odoo>

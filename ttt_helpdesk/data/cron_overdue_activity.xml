@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record id='ir_cron_helpdesk_overdue_activity' model='ir.cron'>
+            <field name="name">Check Helpdesk Overdue Activity</field>
+            <field name="model_id" ref="ttt_helpdesk.model_helpdesk_ticket" />
+            <field name="state">code</field>
+            <field name="code">model.check_overdue_activities()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

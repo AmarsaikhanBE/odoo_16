@@ -1,0 +1,9 @@
+<odoo>
+    <menuitem id="menu_helpdesk_root" name="Helpdesk" sequence="300" />
+
+    <menuitem id="menu_helpdesk_tickets" name="Tickets" parent="menu_helpdesk_root"
+        action="action_helpdesk_ticket" sequence="1" />
+    <menuitem id="menu_helpdesk_ticket_types" name="Ticket Types" parent="menu_helpdesk_root"
+        action="action_helpdesk_ticket_type" sequence="2"
+        groups="base.group_system,ttt_helpdesk.group_manager" />
+</odoo>

@@ -1,0 +1,23 @@
+<odoo>
+    <record id='rule_user' model='ir.rule'>
+        <field name='name'>User: See Own Tickets</field>
+        <field name='model_id' ref="model_helpdesk_ticket" />
+        <field name='groups' eval="[(4, ref('base.group_user'))]" />
+        <field name='domain_force'>[('create_uid', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_staff" model="ir.rule">
+        <field name="name">Staff: See All Sent Tickets</field>
+        <field name="model_id" ref="model_helpdesk_ticket" />
+        <field name="groups" eval="[(4, ref('ttt_helpdesk.group_staff'))]" />
+        <field name="domain_force">['|', ('state', '!=', 'draft'), ('create_uid', '=', user.id)]</field>
+    </record>
+
+    <record id='rule_manager' model='ir.rule'>
+        <field name='name'>Administrator: See All Tickets</field>
+        <field name='model_id' ref="model_helpdesk_ticket" />
+        <field name='groups'
+            eval="[(4, ref('ttt_helpdesk.group_manager')), (4, ref('base.group_system'))]" />
+        <field name='domain_force'>[(1, '=', 1)]</field>
+    </record>
+</odoo>
