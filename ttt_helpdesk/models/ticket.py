@@ -102,7 +102,6 @@ class HelpdeskTicket(models.Model):
             [
                 ("res_model", "=", self._name),
                 ("res_id", "=", self.id),
-                ("state", "=", "open"),
             ]
         )
         return pending_activities == 0
@@ -166,6 +165,8 @@ class HelpdeskTicket(models.Model):
         for record in self:
             if not record.type_id:
                 raise UserError("Захиалгын төрөлийг сонгох шаардлагатай.")
+            if not record._check_pending_activities():
+                raise UserError("Бүх ажилбар хаагдсан байх шаардлагатай.")
             record.write(
                 {
                     "state": "cancelled",

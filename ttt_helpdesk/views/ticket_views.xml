@@ -84,7 +84,7 @@
         <field name='name'>helpdesk.ticket.graph</field>
         <field name='model'>helpdesk.ticket</field>
         <field name='arch' type='xml'>
-            <graph string="Helpdesk Ticket" type="bar">
+            <graph string="HelpDesk Ticket" type="bar">
                 <field name="state" type="row" />
                 <field name="type_id" type="col" />
                 <field name="id" type="measure" string="Number of Tickets" widget="bar" />
@@ -92,9 +92,59 @@
         </field>
     </record>
 
+    <record id="view_helpdesk_ticket_kanban" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.kanban</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class='o_kanban_image'>
+                                <img alt='Avatar' t-if="record.employee_id.raw_value"
+                                    t-att-src="kanban_image('hr.employee', 'image_1024',record.employee_id.raw_value)" />
+                            </div>
+                            <div class="oe_kanban_detials">
+                                <div>
+                                    <i class="fa fa-user text-success" aria-hidden="true"
+                                        style='margin-right: 8px' />
+                                    <field name='employee_id' />
+                                </div>
+                                <div>
+                                    <i class="fa fa-clock-o text-warning" aria-hidden="true"
+                                        style='margin-right: 8px' />
+                                    <field name='sent_date' />
+                                </div>
+                                <h4>
+                                    <field name="name" />
+                                </h4>
+                                <div>
+                                    <i class='fa fa-map-marker text-danger' aria-hidden="true"
+                                        style="margin-right: 8px" />
+                                    <field name='location_id' />
+                                </div>
+                                <div class='d-flex flex-row-reverse gap-2 mt-2'
+                                    style='align-items: end'>
+                                    <field name='staff_id' widget='many2one_avatar_user'
+                                        class='kanban_avatar' />
+                                    <field name="state" widget="badge"
+                                        decoration-success="state=='done'"
+                                        decoration-warning="state=='draft'"
+                                        decoration-danger="state=='cancelled'"
+                                        decoration-info="state=='sent'"
+                                        class='o_badge_secondary' />
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="action_helpdesk_ticket" model="ir.actions.act_window">
         <field name="name">Tickets</field>
         <field name="res_model">helpdesk.ticket</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">kanban,tree,form,graph</field>
     </record>
 </odoo>
